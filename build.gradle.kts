@@ -26,7 +26,6 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("com.mailjet:mailjet-client:4.5.0")
-    implementation("com.sun.jersey:jersey-client:1.8")
     implementation("com.twilio.sdk:twilio:7.35.1")
     implementation("commons-io:commons-io")
     implementation("io.quarkus:quarkus-mongodb-client")

@@ -10,12 +10,11 @@ import com.mailjet.client.resource.Emailv31
 import com.orangebox.kit.core.configuration.Configuration
 import com.orangebox.kit.core.configuration.ConfigurationService
 import com.orangebox.kit.notification.Notification
-import com.sun.jersey.api.client.Client
-import com.sun.jersey.api.client.ClientResponse
-import com.sun.jersey.api.client.WebResource
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import kotlin.reflect.jvm.internal.impl.utils.ExceptionUtilsKt
@@ -85,14 +84,16 @@ class EmailService {
             //Envio utilizando a lib do mailjet nao esta funcionando, esta dando erro 400
             //por esse motivo estamos enviado o json gerado pela lib do mailjet via http client
             try {
-                val body: String = request.getBody()
-                val httpClient: Client = Client.create()
-                httpClient.addFilter(HTTPBasicAuthFilter(mailData?.get("user"), mailData?.get("password")))
-                httpClient.setConnectTimeout(900000)
-                val webResource: WebResource = httpClient.resource("https://api.mailjet.com/v3.1/send")
-                webResource.type("application/json")
-                    .header("Accept", "application/json")
-                    .post(ClientResponse::class.java, body)
+                val url = URL("https://api.mailjet.com/v3.1/send")
+                val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+                con.requestMethod = "POST"
+                con.setRequestProperty("Accept", "application/json")
+                con.doOutput = true
+
+                val body: String = request.body
+                val wr = OutputStreamWriter(con.outputStream)
+                wr.write(body)
+                wr.flush()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
