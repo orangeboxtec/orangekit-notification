@@ -19,19 +19,26 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("io.quarkus:quarkus-resteasy-reactive-jsonb")
+    implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
-    implementation("com.orangebox.kit.core:orangekit-core:0.0.10")
+    implementation("com.mailjet:mailjet-client:4.5.0")
+    implementation("com.sun.jersey:jersey-client:1.8")
+    implementation("com.twilio.sdk:twilio:7.35.1")
+    implementation("commons-io:commons-io")
+    implementation("io.quarkus:quarkus-mongodb-client")
+
+    implementation("com.orangebox.kit.core:orangekit-core:1.0.4")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
 
 group = "com.orangebox.kit.notification"
-version = "0.0.0"
+version = "1.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
