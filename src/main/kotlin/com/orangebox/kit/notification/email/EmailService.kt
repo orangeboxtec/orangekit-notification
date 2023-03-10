@@ -29,7 +29,7 @@ class EmailService {
     fun sendEmailNotificationWithTemplate(notification: Notification) {
         println(
             "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
-                    "COM TEMPLATE " + notification.emailDataTemplate?.templateId
+                    " COM TEMPLATE " + notification.emailDataTemplate?.templateId
         )
 
         val configuration: Configuration? = configurationService.loadByCode("MAIL_DATA")

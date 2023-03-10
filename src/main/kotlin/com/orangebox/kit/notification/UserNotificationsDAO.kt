@@ -7,7 +7,7 @@ import org.bson.Document
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
-@ApplicationScoped
+
 class UserNotificationsDAO : AbstractDAO<UserNotifications>(UserNotifications::class.java) {
     override fun getId(bean: UserNotifications): Any? {
         return bean.idUser
