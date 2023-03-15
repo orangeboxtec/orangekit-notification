@@ -32,7 +32,7 @@ class EmailService {
     private lateinit var mailjetSecret: String
 
 
-    fun sendEmailNotificationWithTemplate(notification: Notification) {
+    fun sendEmailNotificationWithTemplate(notification: Notification): Int? {
 
         println(
             "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
@@ -91,9 +91,13 @@ class EmailService {
             val wr = OutputStreamWriter(con.outputStream)
             wr.write(body)
             wr.flush()
+
+            return con.responseCode
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        return null
     }
 
     fun sendEmailError(e: Exception?) {
