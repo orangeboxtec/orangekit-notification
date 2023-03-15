@@ -20,7 +20,6 @@ class NotificationTest {
 
 
 
-
     fun getUser(): GeneralUser{
         return object : GeneralUser {
             override val email: String
