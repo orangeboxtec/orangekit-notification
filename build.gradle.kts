@@ -30,7 +30,7 @@ dependencies {
     implementation("commons-io:commons-io")
     implementation("io.quarkus:quarkus-mongodb-client")
 
-    implementation("com.orangebox.kit.core:orangekit-core:1.0.4")
+    implementation("com.orangebox.kit.core:orangekit-core:1.0.6")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")

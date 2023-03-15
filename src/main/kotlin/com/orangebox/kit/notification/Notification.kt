@@ -3,6 +3,7 @@ package com.orangebox.kit.notification
 import com.orangebox.kit.core.user.GeneralUser
 import com.orangebox.kit.notification.email.data.EmailData
 import com.orangebox.kit.notification.email.data.EmailDataTemplate
+import org.bson.codecs.pojo.annotations.BsonIgnore
 import java.util.*
 
 class Notification {
@@ -37,10 +38,12 @@ class Notification {
 
     var typeFrom: String? = null
 
+    @BsonIgnore
     var to: GeneralUser? = null
 
     var fgAlertOnly: Boolean? = null
 
+    @BsonIgnore
     var emailDataTemplate: EmailDataTemplate? = null
 
     var emailData: EmailData? = null
