@@ -6,6 +6,9 @@ plugins {
     id("org.kordamp.gradle.jandex") version "1.1.0"
 }
 
+group = "com.orangebox.kit.notification"
+version = "1.0.3"
+
 repositories {
     mavenCentral()
     mavenLocal()
@@ -26,8 +29,9 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("com.mailjet:mailjet-client:4.5.0")
-    implementation("com.twilio.sdk:twilio:7.35.1")
+    implementation("com.twilio.sdk:twilio:9.2.5")
     implementation("commons-io:commons-io")
+    implementation("commons-codec:commons-codec")
     implementation("io.quarkus:quarkus-mongodb-client")
 
     implementation("com.orangebox.kit.core:orangekit-core:1.0.6")
@@ -35,9 +39,6 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
-
-group = "com.orangebox.kit.notification"
-version = "1.0.2"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

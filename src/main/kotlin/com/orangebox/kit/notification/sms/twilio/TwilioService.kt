@@ -13,6 +13,7 @@ class TwilioService {
     @Inject
     private lateinit var configurationService: ConfigurationService
 
+
     fun sendMessage(phone: String?, messageSMS: String?) {
         Twilio.init(
             configurationService.loadByCode("TWILIO_SID")?.value,
