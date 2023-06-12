@@ -26,12 +26,18 @@ class NotificationTest {
                 get() = "dev@orangebox.technology"
             override val id: String
                 get() = "123"
+            override val lastName: String
+                get() = "Teste"
+            override val name: String
+                get() = "Silva"
             override val phoneCountryCode: Int
                 get() = 55
             override val phoneNumber: Long
                 get() = 11971796566
             override val tokenFirebase: String
                 get() = "123"
+            override val urlImage: String
+                get() = ""
 
         }
     }

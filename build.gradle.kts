@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.orangebox.kit.notification"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenCentral()
@@ -34,7 +34,7 @@ dependencies {
     implementation("commons-codec:commons-codec")
     implementation("io.quarkus:quarkus-mongodb-client")
 
-    implementation("com.orangebox.kit.core:orangekit-core:1.0.6")
+    implementation("com.orangebox.kit.core:orangekit-core:1.0.18")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
