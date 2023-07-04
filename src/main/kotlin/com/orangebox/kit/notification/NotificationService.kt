@@ -4,6 +4,8 @@ import com.orangebox.kit.core.configuration.ConfigurationService
 import com.orangebox.kit.core.dao.OperationEnum
 import com.orangebox.kit.notification.email.EmailService
 import com.orangebox.kit.notification.sms.twilio.TwilioService
+import io.smallrye.mutiny.Uni
+import io.smallrye.mutiny.infrastructure.Infrastructure
 import org.apache.commons.io.IOUtils
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -48,7 +50,8 @@ class NotificationService {
                 userNotificationsDAO.update(usuNot)
             }
         }
-        sendMessage(notification)
+        Uni.createFrom().item(notification).emitOn(Infrastructure.getDefaultWorkerPool()).subscribe()
+            .with(this::sendMessage, Throwable::printStackTrace);
     }
 
     fun countNotificationsUnreaded(idUser: String?): Int? {
