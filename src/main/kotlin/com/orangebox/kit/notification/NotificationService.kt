@@ -13,9 +13,11 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
+import javax.websocket.Session
 
 @ApplicationScoped
 class NotificationService {
@@ -31,6 +33,8 @@ class NotificationService {
 
     @Inject
     private lateinit var userNotificationsDAO: UserNotificationsDAO
+
+    var sessions: MutableMap<String, Session> = ConcurrentHashMap<String, Session>()
 
 
     fun sendNotification(notification: Notification) {
@@ -52,6 +56,11 @@ class NotificationService {
         }
         Uni.createFrom().item(notification).emitOn(Infrastructure.getDefaultWorkerPool()).subscribe()
             .with(this::sendMessage, Throwable::printStackTrace);
+
+        if(sessions.keys.contains(notification.to?.id)){
+            val session = sessions[notification.to?.id]
+            session?.asyncRemote?.sendObject(notification)
+        }
     }
 
     fun countNotificationsUnreaded(idUser: String?): Int? {

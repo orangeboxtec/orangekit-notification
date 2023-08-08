@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.allopen") version "1.7.22"
@@ -7,7 +9,7 @@ plugins {
 }
 
 group = "com.orangebox.kit.notification"
-version = "1.0.5"
+version = "1.0.6"
 
 repositories {
     mavenCentral()
@@ -33,6 +35,7 @@ dependencies {
     implementation("commons-io:commons-io")
     implementation("commons-codec:commons-codec")
     implementation("io.quarkus:quarkus-mongodb-client")
+    implementation("io.quarkus:quarkus-websockets")
 
     implementation("com.orangebox.kit.core:orangekit-core:1.0.18")
 
