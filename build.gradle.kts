@@ -37,7 +37,7 @@ dependencies {
     implementation("io.quarkus:quarkus-mongodb-client")
     implementation("io.quarkus:quarkus-websockets")
 
-    implementation("com.orangebox.kit.core:orangekit-core:1.0.18")
+    implementation("com.orangebox.kit.core:orangekit-core:1.0.22")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
