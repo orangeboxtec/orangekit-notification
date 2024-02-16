@@ -8,6 +8,8 @@ import com.mailjet.client.resource.Emailv31
 import com.orangebox.kit.core.configuration.Configuration
 import com.orangebox.kit.core.configuration.ConfigurationService
 import com.orangebox.kit.notification.Notification
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
 import org.apache.commons.codec.binary.Base64
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.json.JSONArray
@@ -16,8 +18,6 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
 
 @ApplicationScoped
 class EmailService {

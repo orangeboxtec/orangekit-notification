@@ -6,6 +6,9 @@ import com.orangebox.kit.notification.email.EmailService
 import com.orangebox.kit.notification.sms.twilio.TwilioService
 import io.smallrye.mutiny.Uni
 import io.smallrye.mutiny.infrastructure.Infrastructure
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.websocket.Session
 import org.apache.commons.io.IOUtils
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -15,9 +18,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.websocket.Session
 
 @ApplicationScoped
 class NotificationService {

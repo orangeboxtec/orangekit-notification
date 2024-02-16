@@ -3,9 +3,9 @@ package com.orangebox.kit.notification
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.orangebox.kit.core.dao.AbstractDAO
+import jakarta.enterprise.context.ApplicationScoped
 import org.bson.Document
 import java.util.*
-import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class UserNotificationsDAO : AbstractDAO<UserNotifications>(UserNotifications::class.java) {

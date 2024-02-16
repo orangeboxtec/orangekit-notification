@@ -1,8 +1,8 @@
 package com.orangebox.kit.notification
 
-import javax.inject.Inject
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
+import jakarta.inject.Inject
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.MediaType
 
 @Path("/notification")
 class NotificationRestService {

@@ -1,11 +1,11 @@
 package com.orangebox.kit.notification
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
+import jakarta.websocket.*
+import jakarta.websocket.server.PathParam
+import jakarta.websocket.server.ServerEndpoint
 import java.util.function.Consumer
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
-import javax.websocket.*
-import javax.websocket.server.PathParam
-import javax.websocket.server.ServerEndpoint
 
 
 @ServerEndpoint("/notification/{userId}")

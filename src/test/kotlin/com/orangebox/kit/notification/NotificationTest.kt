@@ -3,10 +3,10 @@ package com.orangebox.kit.notification
 import com.orangebox.kit.core.user.GeneralUser
 import com.orangebox.kit.notification.email.data.EmailDataTemplate
 import io.quarkus.test.junit.QuarkusTest
+import jakarta.inject.Inject
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import javax.inject.Inject
 
 @QuarkusTest
 class NotificationTest {

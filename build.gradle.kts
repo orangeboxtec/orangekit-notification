@@ -1,15 +1,15 @@
-import java.util.*
+import org.kordamp.gradle.plugin.jandex.tasks.JandexTask
 
 plugins {
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.allopen") version "1.9.22"
     id("io.quarkus")
     id("maven-publish")
     id("org.kordamp.gradle.jandex") version "1.1.0"
 }
 
 group = "com.orangebox.kit.notification"
-version = "1.0.6"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -37,7 +37,7 @@ dependencies {
     implementation("io.quarkus:quarkus-mongodb-client")
     implementation("io.quarkus:quarkus-websockets")
 
-    implementation("com.orangebox.kit.core:orangekit-core:1.0.22")
+    implementation("com.orangebox.kit.core:orangekit-core:2.0.1")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
@@ -51,10 +51,16 @@ java {
 tasks.withType<Test> {
     systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
 }
+
 allOpen {
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
+}
+
+tasks.withType<JandexTask> {
+    dependsOn(":quarkusDependenciesBuild")
+    dependsOn(":test")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
