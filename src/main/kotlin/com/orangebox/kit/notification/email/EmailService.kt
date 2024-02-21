@@ -31,6 +31,9 @@ class EmailService {
     @ConfigProperty(name = "orangekit.notification.mailjet.secret")
     private lateinit var mailjetSecret: String
 
+    @ConfigProperty(name = "orangekit.notification.mailjet.from", defaultValue = "NULL")
+    private lateinit var mailjetFrom: String
+
 
     fun sendEmailNotificationWithTemplate(notification: Notification): Int? {
 
@@ -44,22 +47,28 @@ class EmailService {
             requestVars.put(key, notification.emailDataTemplate?.data?.get(key))
         }
 
+        val obj = JSONObject()
+            .put(
+                Emailv31.Message.TO, JSONArray()
+                    .put(
+                        JSONObject()
+                            .put("Email", notification.to?.email)
+                    )
+            )
+            .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
+            .put(Emailv31.Message.TEMPLATELANGUAGE, true)
+            .put(Emailv31.Message.SUBJECT, notification.title)
+            .put(Emailv31.Message.VARIABLES, requestVars)
+
+        if(mailjetFrom != "NULL"){
+            obj.put(Emailv31.Message.FROM, mailjetFrom)
+        }
+
         val request: MailjetRequest = MailjetRequest(Emailv31.resource)
             .property(
                 Emailv31.MESSAGES, JSONArray()
                     .put(
-                        JSONObject()
-                            .put(
-                                Emailv31.Message.TO, JSONArray()
-                                    .put(
-                                        JSONObject()
-                                            .put("Email", notification.to?.email)
-                                    )
-                            )
-                            .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
-                            .put(Emailv31.Message.TEMPLATELANGUAGE, true)
-                            .put(Emailv31.Message.SUBJECT, notification.title)
-                            .put(Emailv31.Message.VARIABLES, requestVars)
+                        obj
                     )
             )
         if (notification.attachment != null) {
