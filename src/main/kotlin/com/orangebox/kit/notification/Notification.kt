@@ -6,6 +6,11 @@ import com.orangebox.kit.notification.email.data.EmailDataTemplate
 import org.bson.codecs.pojo.annotations.BsonIgnore
 import java.util.*
 
+public interface Sender {
+    val email:String
+    val name:String
+}
+
 class Notification {
 
     var id: String? = null
@@ -40,6 +45,9 @@ class Notification {
 
     @BsonIgnore
     var to: GeneralUser? = null
+
+    @BsonIgnore
+    var from: Sender? = null
 
     var fgAlertOnly: Boolean? = null
 

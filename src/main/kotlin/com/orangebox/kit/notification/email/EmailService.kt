@@ -35,8 +35,8 @@ class EmailService {
     fun sendEmailNotificationWithTemplate(notification: Notification): Int? {
 
         println(
-            "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
-                    " COM TEMPLATE " + notification.emailDataTemplate?.templateId
+                "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
+                        " COM TEMPLATE " + notification.emailDataTemplate?.templateId
         )
 
         val requestVars = JSONObject()
@@ -45,32 +45,36 @@ class EmailService {
         }
 
         val request: MailjetRequest = MailjetRequest(Emailv31.resource)
-            .property(
-                Emailv31.MESSAGES, JSONArray()
-                    .put(
-                        JSONObject()
-                            .put(
-                                Emailv31.Message.TO, JSONArray()
-                                    .put(
-                                        JSONObject()
-                                            .put("Email", notification.to?.email)
-                                    )
-                            )
-                            .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
-                            .put(Emailv31.Message.TEMPLATELANGUAGE, true)
-                            .put(Emailv31.Message.SUBJECT, notification.title)
-                            .put(Emailv31.Message.VARIABLES, requestVars)
-                    )
-            )
+                .property(
+                        Emailv31.MESSAGES, JSONArray()
+                        .put(
+                                JSONObject()
+                                        .put(Emailv31.Message.FROM, JSONObject()
+                                                .put("Email", notification.from?.email)
+                                                .put("Name", notification.from?.name)
+                                        )
+                                        .put(
+                                                Emailv31.Message.TO, JSONArray()
+                                                .put(
+                                                        JSONObject()
+                                                                .put("Email", notification.to?.email)
+                                                )
+                                        )
+                                        .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
+                                        .put(Emailv31.Message.TEMPLATELANGUAGE, true)
+                                        .put(Emailv31.Message.SUBJECT, notification.title)
+                                        .put(Emailv31.Message.VARIABLES, requestVars)
+                        )
+                )
         if (notification.attachment != null) {
             val fileData: String = com.mailjet.client.Base64.encode(notification.attachment)
             request.property(
-                Email.ATTACHMENTS, JSONArray()
+                    Email.ATTACHMENTS, JSONArray()
                     .put(
-                        JSONObject()
-                            .put("Content-type", notification.attachmentFileMimeType)
-                            .put("Filename", notification.attachmentName)
-                            .put("content", fileData)
+                            JSONObject()
+                                    .put("Content-type", notification.attachmentFileMimeType)
+                                    .put("Filename", notification.attachmentName)
+                                    .put("content", fileData)
                     )
             )
         }
@@ -113,13 +117,13 @@ class EmailService {
             requestVars.put("msg", e?.stackTraceToString())
             requestVars.put("user_name", "Suporte")
             request = MailjetRequest(Email.resource)
-                .property(Email.FROMEMAIL, mailData?.get("from"))
-                .property(Email.FROMNAME, mailData?.get("fromName"))
-                .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
-                .property(Email.MJTEMPLATELANGUAGE, true)
-                .property(Email.SUBJECT, "Erro no Servidor")
-                .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, "dev@orangebox.technology")))
-                .property(Email.VARS, requestVars)
+                    .property(Email.FROMEMAIL, mailData?.get("from"))
+                    .property(Email.FROMNAME, mailData?.get("fromName"))
+                    .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
+                    .property(Email.MJTEMPLATELANGUAGE, true)
+                    .property(Email.SUBJECT, "Erro no Servidor")
+                    .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, "dev@orangebox.technology")))
+                    .property(Email.VARS, requestVars)
             client.post(request)
         }
     }
@@ -136,13 +140,13 @@ class EmailService {
             requestVars.put("msg", msg)
             requestVars.put("user_name", name)
             request = MailjetRequest(Email.resource)
-                .property(Email.FROMEMAIL, mailData?.get("from"))
-                .property(Email.FROMNAME, mailData?.get("fromName"))
-                .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
-                .property(Email.MJTEMPLATELANGUAGE, true)
-                .property(Email.SUBJECT, "Erro no Servidor")
-                .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, email)))
-                .property(Email.VARS, requestVars)
+                    .property(Email.FROMEMAIL, mailData?.get("from"))
+                    .property(Email.FROMNAME, mailData?.get("fromName"))
+                    .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
+                    .property(Email.MJTEMPLATELANGUAGE, true)
+                    .property(Email.SUBJECT, "Erro no Servidor")
+                    .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, email)))
+                    .property(Email.VARS, requestVars)
             client.post(request)
         }
     }
