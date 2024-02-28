@@ -41,6 +41,9 @@ class Notification {
     @BsonIgnore
     var to: GeneralUser? = null
 
+    @BsonIgnore
+    var from: Sender? = null
+
     var fgAlertOnly: Boolean? = null
 
     @BsonIgnore
@@ -49,4 +52,9 @@ class Notification {
     var emailData: EmailData? = null
 
     var info: Map<String, Any>? = null
+}
+
+public interface Sender {
+    val email:String
+    val name:String
 }

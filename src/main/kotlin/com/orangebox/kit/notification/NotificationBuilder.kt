@@ -44,6 +44,11 @@ class NotificationBuilder {
         return this
     }
 
+    fun setFrom(sender: Sender): NotificationBuilder {
+        notification.from = sender
+        return this
+    }
+
     fun setCreationDate(creationDate: Date?): NotificationBuilder {
         notification.creationDate = creationDate
         return this
