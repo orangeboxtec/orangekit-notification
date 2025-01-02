@@ -1,15 +1,15 @@
 import org.kordamp.gradle.plugin.jandex.tasks.JandexTask
 
 plugins {
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.allopen") version "1.9.22"
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.allopen") version "2.0.21"
     id("io.quarkus")
     id("maven-publish")
-    id("org.kordamp.gradle.jandex") version "1.1.0"
+    id("org.kordamp.gradle.jandex") version "2.1.0"
 }
 
 group = "com.orangebox.kit.notification"
-version = "2.0.3"
+version = "2.1.0"
 
 repositories {
     mavenCentral()
@@ -24,12 +24,11 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation("io.quarkus:quarkus-resteasy-reactive-jsonb")
+    implementation("io.quarkus:quarkus-rest-jsonb")
     implementation(platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
-    implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("com.mailjet:mailjet-client:4.5.0")
     implementation("com.twilio.sdk:twilio:9.2.5")
     implementation("commons-io:commons-io")
@@ -37,15 +36,15 @@ dependencies {
     implementation("io.quarkus:quarkus-mongodb-client")
     implementation("io.quarkus:quarkus-websockets")
 
-    implementation("com.orangebox.kit.core:orangekit-core:2.0.1")
+    implementation("com.orangebox.kit.core:orangekit-core:2.1.0")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<Test> {
@@ -60,12 +59,6 @@ allOpen {
 
 tasks.withType<JandexTask> {
     dependsOn(":quarkusDependenciesBuild")
-    dependsOn(":test")
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
-    kotlinOptions.javaParameters = true
 }
 
 publishing {
