@@ -11,6 +11,12 @@ public interface Sender {
     val name:String
 }
 
+class Attachment{
+    var file: ByteArray? = null
+    var name: String? = null
+    var type: String? = null
+}
+
 class Notification {
 
     var id: String? = null
@@ -29,11 +35,7 @@ class Notification {
 
     var title: String? = null
 
-    var attachment: ByteArray? = null
-
-    var attachmentName: String? = null
-
-    var attachmentFileMimeType: String? = null
+    var attachments: List<Attachment>? = null
 
     var fgReaded: Boolean? = null
 

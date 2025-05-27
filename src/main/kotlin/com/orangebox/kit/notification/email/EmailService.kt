@@ -34,50 +34,37 @@ class EmailService {
 
     fun sendEmailNotificationWithTemplate(notification: Notification): Int? {
 
-        println(
-                "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
-                        " COM TEMPLATE " + notification.emailDataTemplate?.templateId
-        )
 
         val requestVars = JSONObject()
         for (key in notification.emailDataTemplate?.data?.keys!!) {
             requestVars.put(key, notification.emailDataTemplate?.data?.get(key))
         }
 
-        val request: MailjetRequest = MailjetRequest(Emailv31.resource)
-                .property(
-                        Emailv31.MESSAGES, JSONArray()
-                        .put(
-                                JSONObject()
-                                        .put(Emailv31.Message.FROM, JSONObject()
-                                                .put("Email", notification.from?.email)
-                                                .put("Name", notification.from?.name)
-                                        )
-                                        .put(
-                                                Emailv31.Message.TO, JSONArray()
-                                                .put(
-                                                        JSONObject()
-                                                                .put("Email", notification.to?.email)
-                                                )
-                                        )
-                                        .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
-                                        .put(Emailv31.Message.TEMPLATELANGUAGE, true)
-                                        .put(Emailv31.Message.SUBJECT, notification.title)
-                                        .put(Emailv31.Message.VARIABLES, requestVars)
-                        )
-                )
-        if (notification.attachment != null) {
-            val fileData: String = com.mailjet.client.Base64.encode(notification.attachment)
-            request.property(
-                    Email.ATTACHMENTS, JSONArray()
-                    .put(
-                            JSONObject()
-                                    .put("Content-type", notification.attachmentFileMimeType)
-                                    .put("Filename", notification.attachmentName)
-                                    .put("content", fileData)
-                    )
-            )
+        val message = JSONObject()
+            .put(Emailv31.Message.FROM, JSONObject()
+                .put("Email", notification.from?.email)
+                .put("Name", notification.from?.name))
+            .put(Emailv31.Message.TO, JSONArray().put(JSONObject()
+                .put("Email", notification.to?.email)))
+            .put(Emailv31.Message.TEMPLATEID, notification.emailDataTemplate?.templateId)
+            .put(Emailv31.Message.TEMPLATELANGUAGE, true)
+            .put(Emailv31.Message.SUBJECT, notification.title)
+            .put(Emailv31.Message.VARIABLES, requestVars)
+
+        notification.attachments?.takeIf { it.isNotEmpty() }?.let {
+            val attachmentsArray = JSONArray()
+            it.forEach { att ->
+                attachmentsArray.put(JSONObject()
+                    .put("ContentType", att.type)
+                    .put("Filename", att.name)
+                    .put("Base64Content", com.mailjet.client.Base64.encode(att.file)))
+            }
+            message.put(Emailv31.Message.ATTACHMENTS, attachmentsArray)
         }
+
+        val request = MailjetRequest(Emailv31.resource)
+            .property(Emailv31.MESSAGES, JSONArray().put(message))
+
 
         //Envio utilizando a lib do mailjet nao esta funcionando, esta dando erro 400
         //por esse motivo estamos enviado o json gerado pela lib do mailjet via http client
@@ -96,8 +83,82 @@ class EmailService {
             wr.write(body)
             wr.flush()
 
+            println(
+                "########################## VAI MANDAR UM EMAIL para " + notification.to?.email +
+                        " COM TEMPLATE " + notification.emailDataTemplate?.templateId
+            )
+
             return con.responseCode
         } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return null
+    }
+
+    fun sendEmailNotification(notification: Notification): Int? {
+
+
+
+        val message = JSONObject()
+            .put(
+                Emailv31.Message.FROM, JSONObject()
+                    .put("Email", notification.from?.email)
+                    .put("Name", notification.from?.name)
+            )
+            .put(
+                Emailv31.Message.TO, JSONArray()
+                    .put(
+                        JSONObject()
+                            .put("Email", notification.to?.email)
+                            .put("Name", notification.to?.name)
+                    )
+            )
+            .put(Emailv31.Message.SUBJECT, notification.title)
+            .put(Emailv31.Message.HTMLPART, notification.message)
+
+        if (!notification.attachments.isNullOrEmpty()) {
+            val attachmentsArray = JSONArray()
+
+            notification.attachments?.forEach {
+                val fileData = com.mailjet.client.Base64.encode(it.file)
+                val attachment = JSONObject()
+                    .put("ContentType", it.type)
+                    .put("Filename", it.name)
+                    .put("Base64Content", fileData)
+                attachmentsArray.put(attachment)
+            }
+
+            message.put(Emailv31.Message.ATTACHMENTS, attachmentsArray)
+        }
+
+        val request = MailjetRequest(Emailv31.resource)
+            .property(Emailv31.MESSAGES, JSONArray().put(message))
+
+        //Envio utilizando a lib do mailjet nao esta funcionando, esta dando erro 400
+        //por esse motivo estamos enviado o json gerado pela lib do mailjet via http client
+        try {
+            val url = URL("https://api.mailjet.com/v3.1/send")
+            val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+            con.requestMethod = "POST"
+            con.setRequestProperty("Accept", "application/json")
+            con.doOutput = true
+
+            val encodedAuth = Base64.encodeBase64("$mailjetKey:$mailjetSecret".toByteArray(StandardCharsets.UTF_8))
+            con.setRequestProperty("Authorization", "Basic " + String(encodedAuth))
+
+            val body: String = request.body
+            val wr = OutputStreamWriter(con.outputStream)
+            wr.write(body)
+            wr.flush()
+
+            println(
+                "########################## VAI MANDAR UM EMAIL para " + notification.to?.email
+            )
+
+            return con.responseCode
+        } catch (e: Exception) {
+            println(e.message)
             e.printStackTrace()
         }
 
@@ -117,13 +178,16 @@ class EmailService {
             requestVars.put("msg", e?.stackTraceToString())
             requestVars.put("user_name", "Suporte")
             request = MailjetRequest(Email.resource)
-                    .property(Email.FROMEMAIL, mailData?.get("from"))
-                    .property(Email.FROMNAME, mailData?.get("fromName"))
-                    .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
-                    .property(Email.MJTEMPLATELANGUAGE, true)
-                    .property(Email.SUBJECT, "Erro no Servidor")
-                    .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, "dev@orangebox.technology")))
-                    .property(Email.VARS, requestVars)
+                .property(Email.FROMEMAIL, mailData?.get("from"))
+                .property(Email.FROMNAME, mailData?.get("fromName"))
+                .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
+                .property(Email.MJTEMPLATELANGUAGE, true)
+                .property(Email.SUBJECT, "Erro no Servidor")
+                .property(
+                    Email.RECIPIENTS,
+                    JSONArray().put(JSONObject().put(Contact.EMAIL, "dev@orangebox.technology"))
+                )
+                .property(Email.VARS, requestVars)
             client.post(request)
         }
     }
@@ -140,13 +204,13 @@ class EmailService {
             requestVars.put("msg", msg)
             requestVars.put("user_name", name)
             request = MailjetRequest(Email.resource)
-                    .property(Email.FROMEMAIL, mailData?.get("from"))
-                    .property(Email.FROMNAME, mailData?.get("fromName"))
-                    .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
-                    .property(Email.MJTEMPLATELANGUAGE, true)
-                    .property(Email.SUBJECT, "Erro no Servidor")
-                    .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, email)))
-                    .property(Email.VARS, requestVars)
+                .property(Email.FROMEMAIL, mailData?.get("from"))
+                .property(Email.FROMNAME, mailData?.get("fromName"))
+                .property(Email.MJTEMPLATEID, emailTemplateConfe.value?.toInt())
+                .property(Email.MJTEMPLATELANGUAGE, true)
+                .property(Email.SUBJECT, "Erro no Servidor")
+                .property(Email.RECIPIENTS, JSONArray().put(JSONObject().put(Contact.EMAIL, email)))
+                .property(Email.VARS, requestVars)
             client.post(request)
         }
     }

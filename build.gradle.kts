@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.orangebox.kit.notification"
-version = "2.1.0"
+version = "2.1.6"
 
 repositories {
     mavenCentral()

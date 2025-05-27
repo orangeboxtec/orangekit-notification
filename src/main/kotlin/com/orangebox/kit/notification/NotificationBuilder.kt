@@ -94,18 +94,8 @@ class NotificationBuilder {
         return this
     }
 
-    fun setAttachment(attachment: ByteArray?): NotificationBuilder {
-        notification.attachment = attachment!!
-        return this
-    }
-
-    fun setAttachmentName(attachmentName: String?): NotificationBuilder {
-        notification.attachmentName = attachmentName
-        return this
-    }
-
-    fun setAttachmentFileMimeType(attachmentFileMimeType: String?): NotificationBuilder {
-        notification.attachmentFileMimeType = attachmentFileMimeType
+    fun setAttachments(attachments: List<Attachment>?): NotificationBuilder {
+        notification.attachments = attachments!!
         return this
     }
 
